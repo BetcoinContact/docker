@@ -1,0 +1,53 @@
+User: (OK)
+	[POST] Connect with wallet (user/login) (OK)
+		Request (walletaddress) (OK)
+		Response (status, msg, data: [id, token, Balance, Games: [idGame], rooms: [idRoom, ip, value], need_password?, pendences[id,hash]) (OK)
+
+	[PUT] Add Password (user/addPassword) [Bearer Token] (OK)
+		Request (newPassword) (OK)
+		Response (status, msg) (OK)
+
+	[PUT] Update Password (user/updatePassword) [Bearer Token] (OK)
+		Request (newPassword,oldPassword) / Request Update password Request (currentPassword,password) (OK)
+		Response (status, msg) (OK)
+
+	[POST] Confirm With Password (user/confirmPassword) [Bearer Token] (OK)
+		Request (password) (OK)
+		Response (status, msg) (OK)
+
+Games:
+	[POST] Create Room (game/newRoom) [Bearer Token] (OK)
+		Request (isPublic, game, Ip, value) (OK)
+		Response (status, msg, data: [idRoom]) (OK)
+
+	[PUT] Close Room (game/closeRoom) [Bearer Token] (OK)
+		Request (idRoom) (OK)
+		Response (status, msg) (OK)
+
+	[PUT] Enter Room (game/enterRoom) [Bearer Token] OK)
+		Request (idRoom / ip) (OK)
+		Response (status, msg) OK)
+		
+Transactions: (OK)
+
+	[GET] List transaction (transaction/list) [Bearer Token] (OK)
+		Request () (OK)
+		Response (status, msg, data: [tbl_transaction...]) (OK)
+
+	[POST] Insert transaction (transaction/insert) [Bearer Token] (OK)
+		Request (hash, type, value, fk_transaction (only rollback)) (OK)
+		Response (status, msg) (OK)
+
+	[PUT] Update transaction (transaction/update) [Bearer Token] (OK)
+		Request (status) (OK)
+		Response (status, msg) (OK)
+
+
+
+//Sha512 C#
+string s = "Hello World";
+byte[] bytes = System.Text.Encoding.ASCII.GetBytes( s );
+System.Security.Cryptography.SHA512 sha = System.Security.Cryptography.SHA512.Create();
+byte[] hash = sha.ComputeHash( bytes );
+string result = System.Text.Encoding.ASCII.GetString( hash );
+Debug.Log( result );

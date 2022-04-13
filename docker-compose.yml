@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+
+  caddy:
+    image: caddy/caddy:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8086:8080
+    networks:
+      - network
+
+  db:
+    image: mysql/mysql-server:8.0
+    volumes: 
+      - ./db_data:/var/lib/mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - network
+
+  gardna:
+    build: ./www/gardna
+    volumes: 
+      - ./www:/var/www/html/
+    depends_on:
+       - db
+    restart: always
+    links:
+      - db:mysql
+    ports:
+      - 8081:8081
+    networks:
+      - network
+
+networks:
+  network:
+
+volumes:
+  db_data:
+  caddy_data:
+  caddy_config:
